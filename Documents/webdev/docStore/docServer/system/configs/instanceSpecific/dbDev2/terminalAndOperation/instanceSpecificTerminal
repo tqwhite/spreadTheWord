@@ -1,0 +1,19 @@
+#remember, you cannot send variables out to the command line from here, period.
+
+# if there are any commands specific to this instance, this will add them to the beginning of the UI
+# notesArray can also be added to. it shows up after all of outputStringArray.
+
+
+
+
+# SHORTNAME="instanceSpecific"
+# DESCRIPTION="placeholder for instance specific info"
+# alias $SHORTNAME="echo 'instance specific info'"
+# outputStringArray+=("${SHORTNAMECOLOR}$SHORTNAME${RES}: $DESCRIPTION")
+# 
+# outputStringArray+=("${WHI}-------------------------------------------------------${RES}")
+
+notesArray+=("
+hello from instanceSpecificTerminal for scoreRummy
+
+")

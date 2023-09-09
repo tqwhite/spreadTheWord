@@ -1,0 +1,16 @@
+{
+  "name": "doc-server-plugins",
+  "version": "1.0.0",
+  "description": "Client specific additions to docServer",
+  "main": "unused.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TQ White II",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "qtools-asynchronous-pipe-plus": "^1.0.2",
+    "qtools-functional-library": "^1.1.10"
+  }
+}

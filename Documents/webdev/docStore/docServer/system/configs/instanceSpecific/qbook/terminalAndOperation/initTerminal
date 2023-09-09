@@ -1,0 +1,178 @@
+#!/bin/bash
+#append -x to shebang for debugging messages
+# set -e                         #die on error
+# trap 'echo "got an error"' ERR # or INT DEBUG TERM EXIT RETURN
+
+clear;
+
+# ----------------------------------------------------------------------
+# colors
+
+BLK="\033[30m"
+BLU="\033[34m"
+GRN="\033[32m"
+CYA="\033[36m" #cyan
+RED="\033[31m"
+PUR="\033[35m" #purple
+BRN="\033[33m"
+BLU="\033[34m"
+WHI="\033[00;37m"
+RES="\033[00m" #reset
+
+# ----------------------------------------------------------------------
+# add this directory to PATH
+
+export PROJECT_MANAGEMENT_SUBDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ ! $PATH = *$PROJECT_MANAGEMENT_SUBDIR* ]]; then
+	export PATH=$PATH:$PROJECT_MANAGEMENT_SUBDIR
+fi
+
+
+# ----------------------------------------------------------------------
+# initialize display variables
+
+SHORTNAMECOLOR="${RED}"
+
+declare -a outputStringArray
+declare -a aliasExecutionArray
+
+outputStringArray=()
+notesArray=()
+
+docClientSystemPath="/Users/tqwhite/Documents/webdev/docStore/docClient/system/";
+docServerSystemPath="$(realpath $PROJECT_MANAGEMENT_SUBDIR/../../../../)"
+
+docServerPathTerminal="$docServerSystemPath/configs/instanceSpecific/qbook/terminalAndOperation/initTerminal";
+docClientPathTerminal="$docClientSystemPath/configs/instanceSpecific/qbook/terminalAndOperation/instanceSpecificTerminal";
+echo $docClientPathTerminal;
+docServerBbProject="$docServerSystemPath/../docServer.bbprojectd"
+docClientBbProject="$docClientSystemPath/../docClient.bbprojectd"
+echo "XXXX"l
+echo $docServerBbProject;
+# ----------------------------------------------------------------------
+# boilerplate alias constant definitions
+
+outputStringArray+=("\n${WHI}docServer Details (prefix: ${RED}dss${RES}) -------------------------------------------------------${RES}\n")
+
+# ----------------------------------------------------------------------
+# aliases
+
+
+
+
+outputStringArray+=("${WHI}----------------------------------------------------------------------${RES}")
+outputStringArray+=("DEPLOY SERVER TO DB2")
+
+SHORTNAME="dssdb2f_deployConfigDb2"
+DESCRIPTION="deploy configs to db2, restart service"
+alias $SHORTNAME="deployPrograms docStore --actions=configs,restart"
+outputStringArray+=("${SHORTNAMECOLOR}$SHORTNAME${RES}: $DESCRIPTION")
+
+SHORTNAME="dssdb2c_deployCodeDb2"
+DESCRIPTION="deploy code to db2, restart service"
+alias $SHORTNAME="deployPrograms docStore --actions=code,restart"
+outputStringArray+=("${SHORTNAMECOLOR}$SHORTNAME${RES}: $DESCRIPTION")
+
+SHORTNAME="dssdb2all_deployAllDb2"
+DESCRIPTION="deploy all to db2 (code, configs), restart service"
+alias $SHORTNAME="deployPrograms docStore --actions=code,configs,restart"
+outputStringArray+=("${SHORTNAMECOLOR}$SHORTNAME${RES}: $DESCRIPTION")
+
+outputStringArray+=("${WHI}----------------------------------------------------------------------${RES}")
+outputStringArray+=("DEV SYSTEM TOOLS")
+
+SHORTNAME="dssrepo"
+DESCRIPTION="cd server code"
+alias $SHORTNAME="cd $docServerSystemPath/code/; git status;"
+outputStringArray+=("${SHORTNAMECOLOR}$SHORTNAME${RES}: $DESCRIPTION")
+
+SHORTNAME="dssedit"
+DESCRIPTION="open docStore server project"
+alias $SHORTNAME="open $docServerBbProject;"
+outputStringArray+=("${SHORTNAMECOLOR}$SHORTNAME${RES}: $DESCRIPTION")
+
+SHORTNAME="dssf_configDir"
+DESCRIPTION="cd server config"
+alias $SHORTNAME="cd $docServerSystemPath/configs/; git status;"
+outputStringArray+=("${SHORTNAMECOLOR}$SHORTNAME${RES}: $DESCRIPTION")
+
+SHORTNAME="dssexec"
+DESCRIPTION="run docServer app"
+alias $SHORTNAME="node $docServerSystemPath/code/server/startAll.js"
+outputStringArray+=("${SHORTNAMECOLOR}$SHORTNAME${RES}: $DESCRIPTION")
+
+SHORTNAME="dssrun"
+DESCRIPTION="run docServer app"
+alias $SHORTNAME="ndwatchLink /Users/tqwhite/Documents/webdev/docStore/docServer/system; ndutil node /Users/tqwhite/Documents/webdev/docStore/docServer/system/code/server/startAll.js"
+outputStringArray+=("${SHORTNAMECOLOR}$SHORTNAME${RES}: $DESCRIPTION")
+
+# ----------------------------------------------------------------------
+SHORTNAME="editThis"
+DESCRIPTION="edit this file"
+alias $SHORTNAME="bbedit $BASH_SOURCE; bbedit $docClientPathTerminal; bbedit $docServerPathTerminal;"
+#outputStringArray+=("${SHORTNAMECOLOR}$SHORTNAME${RES}: $DESCRIPTION")
+# ----------------------------------------------------------------------
+# add instanceSpecific if exists
+
+if [[ -f "$docClientPathTerminal" ]]; then
+	source "$docClientPathTerminal"
+fi
+
+
+
+
+if [[ "$1" =~ ^c ]]; then
+cd "$docClientSystemPath";
+#pwd;
+profileMessage="${BLK}docStore CLIENT directory${RES}";
+open $docClientBbProject;
+fi
+
+if [[ "$1" =~ ^s ]]; then
+cd "$docServerSystemPath";
+profileMessage="${BLK}docStore SERVER directory${RES}";
+open $docServerBbProject; 
+fi
+
+
+# ----------------------------------------------------------------------
+# CREATE ALIASES FROM SUBORDINATE FILES
+
+aliasFilePath="/tmp/aliases"
+echo "" > "$aliasFilePath";
+for i in "${aliasExecutionArray[@]}"; do 
+	echo -e "$i\n" >> "$aliasFilePath"
+done
+
+echo -e "$aliasFilePath";
+source "$aliasFilePath"
+
+# ----------------------------------------------------------------------
+# notes, if needed
+
+#  notesArray+=("Remember:")
+#  notesArray+=("might come in handy")
+
+# ----------------------------------------------------------------------
+# VARIABLES AND COMMANDS
+
+export latestScript="${BASH_SOURCE[0]}"
+alias latestScript="source $latestScript"
+
+export docServerSystemPath="$docServerSystemPath";
+
+# export dtProjectPathmanagement="$dtProjectPath/management"
+# export PATH="$PATH:$dtProjectPathmanagement"
+# cd "$dtProjectPath";
+
+echo -e "
+
+================================================================
+${BLK}Init Local Environment: $USER@$HOSTNAME:$(echo $BASH_SOURCE | sed "s#$HOME#~#")${RES}
+
+$(for i in "${outputStringArray[@]}"; do echo -e "$i"; done)
+$(for i in "${notesArray[@]}"; do echo -e "$i"; done)
+${BLK}'initds [s|c}' shows this information again. 'editThis' edits docServer & docClient files.${RES}
+================================================================\n\
+$profileMessage
+"

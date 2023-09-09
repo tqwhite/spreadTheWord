@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+#append -x to shebang for debugging messages
+set -e                         #die on error
+trap 'echo "got an error"' ERR # or INT DEBUG TERM EXIT RETURN
+
+# ----------------------------------------------------------------------
+# error handling
+
+err() {
+	echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+}
+
+# ----------------------------------------------------------------------
+# colors
+
+BLK="\033[30m"
+BLU="\033[34m"
+GRN="\033[32m"
+CYA="\033[36m" #cyan
+RED="\033[31m"
+PUR="\033[35m" #purple
+BRN="\033[33m"
+BLU="\033[34m"
+WHI="\033[00;37m"
+RES="\033[00m" #reset
+
+# ----------------------------------------------------------------------
+# add this directory to PATH
+
+export PROJECT_MANAGEMENT_SUBDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ ! $PATH = *$PROJECT_MANAGEMENT_SUBDIR* ]]; then
+	export PATH=$PATH:$PROJECT_MANAGEMENT_SUBDIR
+fi
+
+# ----------------------------------------------------------------------
+# initialize display variables
+
+SHORTNAMECOLOR="${RED}"
+
+declare -a outputStringArray
+
+outputStringArray=()
+notesArray=()
+
+# ----------------------------------------------------------------------
+# boilerplate alias constant definitions
+
+# SERVER SYSTEM SERIES =======================
+# SHORTNAME="short"
+# FULLNAME="nameOfService"
+#
+# alias log$SHORTNAME="journalctl -f -n1000 --unit=$FULLNAME.service"
+# alias start$SHORTNAME="sudo systemctl start $FULLNAME.service"
+# alias stop$SHORTNAME="sudo systemctl stop $FULLNAME.service"
+# alias restart$SHORTNAME="sudo systemctl restart $FULLNAME.service"
+# alias status$SHORTNAME="sudo systemctl status $FULLNAME.service"
+# outputStringArray+=("$FULLNAME: log$SHORTNAME, restart$SHORTNAME, status$SHORTNAME, stop$SHORTNAME, start$SHORTNAME")
+#
+
+# GENERAL COMMAND SERIES =======================
+# SHORTNAME="short"
+# DESCRIPTION="description"
+# alias $SHORTNAME="sudo systemctl status $FULLNAME.service"
+# outputStringArray+=("$SHORTNAME: $DESCRIPTION")
+
+# ----------------------------------------------------------------------
+# aliases
+
+SHORTNAME="editThis"
+DESCRIPTION="edit this file"
+alias $SHORTNAME="bbedit $0"
+outputStringArray+=("${SHORTNAMECOLOR}$SHORTNAME${RES}: $DESCRIPTION")
+
+# ----------------------------------------------------------------------
+# add instanceSpecific if exists
+
+if [[ -f "$PROJECT_MANAGEMENT_SUBDIR/instanceSpecificTerminal" ]]; then
+	source "$PROJECT_MANAGEMENT_SUBDIR/instanceSpecificTerminal"
+fi
+
+# ----------------------------------------------------------------------
+# notes, if needed
+
+#  notesArray+=("Remember:")
+#  notesArray+=("might come in handy")
+
+# ----------------------------------------------------------------------
+# VARIABLES AND COMMANDS
+
+export latestScript="${BASH_SOURCE[0]}"
+alias latestScript="source $latestScript"
+
+# export dtProjectPathmanagement="$dtProjectPath/management"
+# export PATH="$PATH:$dtProjectPathmanagement"
+# cd "$dtProjectPath";
+
+echo -e "
+
+================================================================
+Init Local Environment: $USER@$HOSTNAME:$(echo $BASH_SOURCE | sed "s#$HOME#~#")
+
+$(for i in "${outputStringArray[@]}"; do echo -e "$i"; done)
+
+$(for i in "${notesArray[@]}"; do echo -e "$i"; done)
+
+${WHI}'bashrc' shows this information again.${RES}
+================================================================\n\
+
+"

@@ -1,0 +1,15 @@
+{
+  "name": "spread-the-word",
+  "version": "1.0.0",
+  "description": "Flexible utility to send messages using internet services",
+  "main": "spreadTheWord.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com:tqwhite/spreadTheWord.git"
+  },
+  "author": "TQ White II",
+  "license": "ISC"
+}

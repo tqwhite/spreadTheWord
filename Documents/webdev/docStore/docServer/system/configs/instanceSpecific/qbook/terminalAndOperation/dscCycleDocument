@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+# add -x to the shebang for debugging
+
+# ----------------------------------------------------------------------
+# colors
+
+BLK="\033[30m";
+BLU="\033[34m";
+GRN="\033[32m";
+CYA="\033[36m"; #cyan
+RED="\033[31m";
+PUR="\033[35m"; #purple
+BRN="\033[33m";
+BLU="\033[34m";
+WHI="\033[00;37m";
+RES="\033[00m"; #reset
+
+sourceFilePath='/Users/tqwhite/Documents/webdev/docStore/docClient/system/testData/IMG_8798.JPG'
+
+
+# echo -e "
+# client config file says dbDev2 at: /Users/tqwhite/Documents/webdev/docStore/docClient/system/code/configs/systemParameters.ini
+# 'initds' export dscUseSpecialDomain=\"localhost:3000\" to override config
+# So qbook use is always localhost
+# 
+# UNLESS the argument db2 is added, then it accesses dbDev2.hosts
+# eg
+# docStore db2
+# 
+# "
+
+
+# read -p "Use dbDev2 instead of localhost? [Y/n]" -n 1 -r #does not require carriage return
+# #read -p "Are you sure? [Y/n]" -n 1 -r #does require carriage return
+# echo -e "\n\n";
+
+if [[ $1 =~ ^db2$ ]]
+then
+ export dscUseSpecialDomain=""
+else
+ export dscUseSpecialDomain="localhost:3000"
+fi
+
+
+silentSwitch="-silent"
+if [[ "debug" == "$1" ]]; then
+	silentSwitch=""
+
+export uploadToken="gEcEKmDXWmZrGcRs/l0hLH0iyVlId8tVPp975jEywWxiX8khKlOFk/IaZhRF6lFawLyKI817cpVjf8GgiHrZS5UyrdVWEi81tZcAW8IMtkAcDJAlcae9x5Xj9zLM4FUAITVb0fK4Oy0eIUKzTBE//fC4xmDx4DCikEe7a3B7PA8IZl3SaZxnUyH4INnrah6LVG8BzqNrerVXFZTSlNUsYsFvqVwfWXbRxfQl4vZ1ZCECizNqHvxEYh2MSK40cpib23jA4BFmVSyYbH55TNcWnyQYLOHUi91FH7CnhTPu26/vuDevJkDzg3kWnLAmF+9cdg5acnEEMTSvekCFsEP2m4SEmqFF2FSJbItiVOBzNrDhKyIENOuPPJkf6GbTAUVEoc4JtSP3UlovA6dYDil7GSjBvS+0DJ11ejQF7bB+cgv715R6SYZEIht9KX4LRSHQjB1vZVMaZi81tx3LydUqNh+/+Bw9Vcrsxc6flrrjv3+TFOmzRRSf9h6nn/MWhvqq3+8HtJgcrtLKADF+8Sxhl/KSED5ULSfJKdBh32weepsclgtwZ1HpDpdvFMot9GKgRMK7lqBC1rqZI3wenQWfC3ZaG/wmfzrNMTE5JAxiLhQwdU08b9H+xGN0+KAiQP8UMgQhm+1pGqGQdP1VMfPYGcKwFh+gpSqY9lmZNe4TPDA="
+export downloadToken="LewCrJ8ERZtjWd1qK09nrgTumo31eH2vYvALd3CJ38OVpjVLByUmpTgMzrJb6rzC91ketYU2s878OLI58wHtb5HUHBNUlj56EtV9CVNIaFZJb9xQpYuoyYVy5qvo6Ki5EvPhI1pLhV4WKVKKa+mcuA9kmr7/tLNZmT1LeOgeK0nATceePrZB9i2VnOomOjozcBAXIHbQpiNu2bEoqQ2hGLeRpJWhUpc6VHWd2cDe0WWq8YO0dOwLVrgYkxy4l/La6TrediTF0+O1+Xv8XQYQyX/jN3tyDndwHayms7RHk59yot3f2ND89+yKXmcOPJyIug0xqygbDGAym7s8RMXwqRGGA3lbxDcsWEUB5VxBltTz5jixKJidSA183+OfKQF1vZIWApSoJRdeoptM+QDQjQnvgEQHIZEKLFSar0fwwMwoFQawVIyDghTbNy1dWNNQNJlGfctT/tHVZYGNxzfEEaZ7HnK6SGth25EMQ8XuMi0ZQ3l0T0L9u/nJ7CFKf6l6JA7wlcNGYpzkj3K2BZSgV6gQHfMf6dyNed3GpQ0CxxlSERp8b/79Fa7qKabnTsMYukVMzBVSJOhbhjWdFsM/nAUY1Av+OBi1G9OOQyW7u2xk7HvGZWZ8vd8KuSQl80Ih/dyhT/JBWxxdbazH7tLimVLIiIG5amnlWYjEEALsADs="
+
+
+echo -e "
+
+========================================================================================
+
+docStoreClient 
+--ds_filepath="$sourceFilePath" 
+--ds_requesttoken='TOKEN' 
+--ds_refid='REFID' 
+--ds_operation='upload' 
+--ds_rsakeyserverstaticpublic='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDWheHaV/HiLg/Qqc1ZIOnz8+Nri1SskLJ9BGBqx86XsTydkZugNWL6vCHGYN3Zhv8H0JsfdTSGNN/WsexZx/sk5VL/AS53Md/02yoJvbr+/okFHK1Sv9hZoPGl0YVhJGtBbd7Na5MgrQMnfMZBLD/s0hu37yDt+dHyJL9tnh+pPkBBIzeN6hP6rkbDJCroNfzleoO+dbkC0z9C3bHoqYeL7ok3jcoP/S1ScBNWeQN+0F7z2xetI4RwQ3mnMlV7ddFmV1N3qRquL/m7b8rSYgYTpguTGkDfeb0s/Bk1xQRGCzZqjR0dihhkr28a+ns/NFiFWasZaUY82rWzXSkHl4Pf docStore_authKey' 
+--ds_authuserrequesttoken='R7gIxzQHYpWvRqGce/N+h7bX8dnq9AnMKwqJn6z+4QEohVcW6jehiDkCJl88nO5KZ26aTujNqeM6GI6DskHp8MyJIvE/cH3dOzbqaplJx6K9a8jIaqmXPnUlCPcCfFhcHMEAti2Z++q1DCVMGeFUmsP3EQ6rqtr4khDC+tL9kILCFq55rx8dqwOxrgPD/+Pye1U7sW677fneaOexZMPn2PXlCQNlKOgkjek/XG+Ft0ABKfey0tTIZdYqj/e7kx5g8kiEZkmj02rINO5zq1/Bidn65Cf4K2XRyedKlmOEQGVp2L2ae8ADWXyNQC6MF3UBL3TubtEheIZ+7+1n46Tpew==' 
+--ds_authusername='tqwhite' 
+-omitStandardRequestFile $silentSwitch
+
+========================================================================================
+
+docStoreClient 
+--ds_uri="$resultUri" 
+--ds_requesttoken='TOKEN' 
+--ds_refid='REFID' 
+--ds_operation='download' 
+--ds_rsakeyserverstaticpublic='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDWheHaV/HiLg/Qqc1ZIOnz8+Nri1SskLJ9BGBqx86XsTydkZugNWL6vCHGYN3Zhv8H0JsfdTSGNN/WsexZx/sk5VL/AS53Md/02yoJvbr+/okFHK1Sv9hZoPGl0YVhJGtBbd7Na5MgrQMnfMZBLD/s0hu37yDt+dHyJL9tnh+pPkBBIzeN6hP6rkbDJCroNfzleoO+dbkC0z9C3bHoqYeL7ok3jcoP/S1ScBNWeQN+0F7z2xetI4RwQ3mnMlV7ddFmV1N3qRquL/m7b8rSYgYTpguTGkDfeb0s/Bk1xQRGCzZqjR0dihhkr28a+ns/NFiFWasZaUY82rWzXSkHl4Pf docStore_authKey' 
+--ds_authuserrequesttoken='R7gIxzQHYpWvRqGce/N+h7bX8dnq9AnMKwqJn6z+4QEohVcW6jehiDkCJl88nO5KZ26aTujNqeM6GI6DskHp8MyJIvE/cH3dOzbqaplJx6K9a8jIaqmXPnUlCPcCfFhcHMEAti2Z++q1DCVMGeFUmsP3EQ6rqtr4khDC+tL9kILCFq55rx8dqwOxrgPD/+Pye1U7sW677fneaOexZMPn2PXlCQNlKOgkjek/XG+Ft0ABKfey0tTIZdYqj/e7kx5g8kiEZkmj02rINO5zq1/Bidn65Cf4K2XRyedKlmOEQGVp2L2ae8ADWXyNQC6MF3UBL3TubtEheIZ+7+1n46Tpew==' 
+--ds_authusername='tqwhite' 
+-omitStandardRequestFile $silentSwitch
+
+=========================================================================================
+
+"
+
+
+
+
+fi
+
+if [[ "" == "$dscUseSpecialDomain" ]]; then
+	targetServer="db2"
+	else
+	targetServer="localhost"
+fi
+resultUri=$(docStoreClient \
+--ds_filepath="$sourceFilePath" \
+--ds_requesttoken='TOKEN' \
+--ds_refid='c9881805-841a-4ffc-9a27-5a5a1c869c1a' \
+--ds_operation='upload' \
+--ds_rsakeyserverstaticpublic='ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDWheHaV/HiLg/Qqc1ZIOnz8+Nri1SskLJ9BGBqx86XsTydkZugNWL6vCHGYN3Zhv8H0JsfdTSGNN/WsexZx/sk5VL/AS53Md/02yoJvbr+/okFHK1Sv9hZoPGl0YVhJGtBbd7Na5MgrQMnfMZBLD/s0hu37yDt+dHyJL9tnh+pPkBBIzeN6hP6rkbDJCroNfzleoO+dbkC0z9C3bHoqYeL7ok3jcoP/S1ScBNWeQN+0F7z2xetI4RwQ3mnMlV7ddFmV1N3qRquL/m7b8rSYgYTpguTGkDfeb0s/Bk1xQRGCzZqjR0dihhkr28a+ns/NFiFWasZaUY82rWzXSkHl4Pf docStore_authKey' \
+--ds_authuserrequesttoken="$uploadToken" \
+--ds_authusername='tqwhite' \
+-omitStandardRequestFile $silentSwitch
+)
+
+resultFilePath=$(docStoreClient \
+--ds_uri="$resultUri" \
+--ds_requesttoken='TOKEN' \
+--ds_refid='2f79a670-545b-4c29-a06b-9a21bf000244' \
+--ds_operation='download' \
+--ds_rsakeyserverstaticpublic="$downloadToken" \
+--ds_authuserrequesttoken='R7gIxzQHYpWvRqGce/N+h7bX8dnq9AnMKwqJn6z+4QEohVcW6jehiDkCJl88nO5KZ26aTujNqeM6GI6DskHp8MyJIvE/cH3dOzbqaplJx6K9a8jIaqmXPnUlCPcCfFhcHMEAti2Z++q1DCVMGeFUmsP3EQ6rqtr4khDC+tL9kILCFq55rx8dqwOxrgPD/+Pye1U7sW677fneaOexZMPn2PXlCQNlKOgkjek/XG+Ft0ABKfey0tTIZdYqj/e7kx5g8kiEZkmj02rINO5zq1/Bidn65Cf4K2XRyedKlmOEQGVp2L2ae8ADWXyNQC6MF3UBL3TubtEheIZ+7+1n46Tpew==' \
+--ds_authusername='tqwhite' \
+-omitStandardRequestFile $silentSwitch
+)
+
+echo -e "\n--------------------------------------";
+echo -e "${WHI}using = $targetServer$ / $sourceFilePath${RES}";
+echo -e "resultUri = ${GRN}$resultUri${RES}";
+echo -e "resultFilePath = ${GRN}${resultFilePath}${RES}";
+echo -e "--------------------------------------\n";

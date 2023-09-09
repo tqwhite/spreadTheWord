@@ -1,0 +1,146 @@
+5/3/32
+
+Status: No known problems that aren't missing features mentioned below. I deployed and ran the system. All looks good.
+
+NEXT:
+
+add client registration/transfer ID mechanism to restrict use of token file to the correct user/computer, also to ban that transfer ID
+
+add an admin-log log to record docRequest token requests. Probably combine in a db file with audit-log and reorg.
+
+
+qtDump() does not seem to pass on 'this' when it is a string!!!
+
+does the token's claim include the file name/uri? Why the hell not? 
+Oh, because Helix can't. 
+Make it so that the claim includes and enforces the name/uri. 
+Include the concept of a wild card to accommodate Helix.
+
+
+client:assembleRequestionFile:	xLog.status(`WARNING: Make it so that switch -keepRequestFile does not work in production`); NOTE: now that tokens are deleted it NEVER WORKS
+                 
+add rotate-logs to both client and server
+
+DONE make it so that client behavior has better error message than "missing ds_rsakeyserverstaticpublic" when request is missing or bad (eg, remove subsequent messages)
+
+DONE sort out auth, move get token stuff to far side of isvalid()
+
+SKIP, it's not extraneous after all. get rid of extraneous notoken:true
+
+3/15/23
+
+Next:
+
+DONE implement sqlite for audit-log and token management functions
+
+maybe implement watched directory mechanism for docStoreClient (Download folder to match initiateRequest)
+Remove my backdoor to create super token
+change ephemeral URL for super-token a generate multiple, expiring, one-time use URLs with audit record, NEW make it invitation only
+make a localhost-only (or other configured URLs) to get current ephemeral URL with a mechanism to text the super-token ephemeral URL to recipient for distribution
+maybe figure out how to correctly create the applescript droplet, also, make a double click to open and initialize initiate
+make URI list generation on initiateRequest prevented by lack of token, then make it so that it consults a privilege system to decide what it shows (maybe, this is really Helix province)
+verify/formalize switch to make library encrypted
+SKIP cannot reproduce. deal with the filename parsing problem explained below, then make it so the filename generating is smarter
+
+was this done: add function to copy ds_rsakeyserverstaticpublic and MAYBE ds_rsakeyserverstaticpublic (also move this out of request) into application support dir
+
+
+
+
+filename parsing problem:
+why does this URI crash the server?
+/tmp/docStore/documents/17b3f256bcdd35ae4e5000036810bcf5_CleanShot%202023-03-10%20at%2013.24.27
+
+				xLog.status(
+					`ERROR: cannot parse URL for ${
+						requestObject.ds_uri
+					}, get now fileName. Exiting. THIS IS A BUG HACK`
+				);
+    at Array.<anonymous> (/Users/tqwhite/Documents/webdev/docStore/docServer/system/code/server/lib/file-storage/engines/local-file-system/lib/retrieve.js:120:28)
+
+
+
+
+DONE make docClient scan its default dir and remove req*.tsv files
+DONE change /initiateRequest to /generateTransferRequest
+
+
+
+
+12/16/22 project solid, made the entire thing work correctly. Can deploy to any dbDev. Dev tools can send/receive files from localhost or dbDev2
+
+Things to do
+
+DONE formalize generate token process
+
+add hxc endpoint to README in helix-standard plugin
+
+https://stackoverflow.com/questions/60369148/how-do-i-replace-deprecated-crypto-createcipher-in-node-js
+
+
+
+DONE work on authtoken generator, make sure ds_authusername works, change name to ds_authusername, also on assemble-validate-request-object line 67
+
+DONE change filePath field ds_filePath and ds_uri
+cDONE hange 	requestToken	refId	operation	authUserName	rsakeyServerStaticPublic	authUserRequestToken to ds_ names
+DONE change requestObject to put all non-R_* names into a subordinate property called opaqueData
+DONE change header creation/receiving to put opaqueData into properties named dsop-* and vice versa
+
+DONE add function that receives ds_authusername, generates server and client keys, packages them for transit and updates the (new) internal auth database with the user record (name, clientKey, serverKey)
+
+CLIENT
+DONE verify, exercise, validate command line controls
+
+
+add stubb of notify helix, http function (use genericwhite.ping)
+add indexing-agent that writes a request file to ...?
+
+add client ability to specify request file instead of default
+
+
+fix deprecated crypto
+stop crash when bad URI is requested
+
+convert audit-log indexing agent to sqlite, searchable entity, was add sqlite for basic log
+Add environment variable for secure container to specify non-/tmp working directory
+
+
+revise to make folders have option, either upload separate files (as is now) or treat folder as unit with name (for package, eg, .oo3)
+
+
+
+
+wrap/unwrap file package
+encrypt url transfer from server
+add getUpload request object endpoint
+add getDownload request object endpoint
+add userSpecified file to request system
+add expiration to token
+add download functionality
+add user functions to sqlite, mainly authPrivateKey (with ability to have 'tqwhite' use 'helix' key), eventually MAC address, etc
+
+cleanup .wrap file if server crashes, presently it's left behind
+
+DONE add symmetric key exchange for performance to the container
+DONE add access-log indexing agent for sqlite
+DONE add replace uploaded file with request object (allow command line spec of upload file)
+DONE publish secure-container, do things for that, deploy system to dev servers, verify function
+DONE add environment var and controls to make dev/prod environment switch easier for client
+DONE make it send directories
+DONE do retrieve function
+SKIP (would kill upload of complex package file types, eg 003) add configuration to disallow directories (could be that we want to unpack and send files separately someday)
+
+status 4/15/22
+
+deployment of server works to db2 for hello world
+compile app and installer works on db3 for hello world
+
+client/server can send/receive a file on dev
+
+
+NEXT
+
+make automator/bash integration to execute drop files to docStore
+
+structure app, get configs, do startSystem() to initialize /upload
+

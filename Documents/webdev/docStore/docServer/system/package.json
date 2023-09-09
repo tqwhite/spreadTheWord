@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "qtools-asynchronous-pipe-plus": "^1.0.2",
+    "qtools-parse-command-line": "^1.0.5",
+    "qtools-secure-container": "^0.0.24"
+  }
+}
